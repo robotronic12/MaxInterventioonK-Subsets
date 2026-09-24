@@ -48,6 +48,20 @@ namespace MaxInterventionK_Subsets
         }
 
         /// <summary>
+        /// Clears the bit with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the bit to clear.</param>
+        public void Clear(int id)
+        {
+            ValidateId(id);
+
+            int wordIndex = id / BITS_PER_WORD;
+            int bitIndex = id % BITS_PER_WORD;
+
+            _words[wordIndex] &= ~(1UL << bitIndex);
+        }
+
+        /// <summary>
         /// Checks if the bit with the specified ID is set.
         /// </summary>
         /// <param name="id">The ID of the bit to check.</param>
