@@ -11,7 +11,7 @@ namespace MaxInterventionK_Subsets
     {
         public Greedy(Instance instance)
         {
-            AlgorithmName = "Greedy";
+            _algorithmName = "Greedy";
             _instance = instance;
 
             _bestSolution = new Solution(instance);

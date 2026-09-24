@@ -12,7 +12,7 @@ namespace MaxInterventionK_Subsets
 
         public RandomAlgorithm(Instance instance, int n)
         {
-            AlgorithmName = "Random";
+            _algorithmName = "Random";
             _instance = instance;
             _n = n;
 

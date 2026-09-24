@@ -32,13 +32,40 @@ namespace MaxInterventionK_Subsets
                 
             if (_elements.Count == 1)
             {
-                _commonFeatures = _instance.GetFeaturesBitSetByElement(elementId);
+                _commonFeatures = _instance.GetFeaturesBitSetByElement(elementId).Clone();
             }
             else
             {
                 _commonFeatures.AndWith(_instance.GetFeaturesBitSetByElement(elementId));
             }
 
+            return true;
+        }
+
+        /// <summary>
+        /// Removes an element from the solution.
+        /// </summary>
+        /// <param name="elementId">The ID of the element to remove.</param>
+        /// <returns>True if the element was removed successfully; otherwise, false.</returns>
+        public bool RemoveElement(int elementId)
+        {
+            if (!_elements.Remove(elementId))
+                return false;
+
+            for(int i = 0; i < _elements.Count; i++)
+            {
+                if (_elements.Count == 0)
+                {
+                    // We clear the previous common features and add the features of the first element in the solution.
+                    _commonFeatures = _instance.GetFeaturesBitSetByElement(i).Clone();
+                }
+                else
+                {
+                    // We intersect the features of the remaining elements in the solution to update the common features.
+                    _commonFeatures.AndWith(_instance.GetFeaturesBitSetByElement(i));
+                }
+            }
+            
             return true;
         }
 
@@ -90,6 +117,23 @@ namespace MaxInterventionK_Subsets
 
             actualFeatures.AndWith(elementFeatures);
             return actualFeatures.Count();
+        }
+
+        /// <summary>
+        /// Clones the current solution instance.
+        /// </summary>
+        /// <returns>A new Solution instance that is a copy of the current instance.</returns>
+        public Solution Clone()
+        {
+            Solution copy = new Solution(_instance);
+
+            copy._elements =
+                new HashSet<int>(_elements);
+
+            copy._commonFeatures =
+                _commonFeatures.Clone();
+
+            return copy;
         }
     }
 }

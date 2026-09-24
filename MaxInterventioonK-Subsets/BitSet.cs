@@ -27,9 +27,9 @@ namespace MaxInterventionK_Subsets
             _words = new ulong[wordCount];
         }
 
-        private BitSet(int featureCount, ulong[] words)
+        private BitSet(int bitsCount, ulong[] words)
         {
-            _bitsCount = featureCount;
+            _bitsCount = bitsCount;
             _words = words;
         }
 
