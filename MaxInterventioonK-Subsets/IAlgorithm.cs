@@ -11,5 +11,7 @@ namespace MaxInterventionK_Subsets
         Solution Run();
         String PrintSolution();
         String PrintSummarySolution();
+        void SaveExperimentResults(string path);
+        void SetTimeElapsed(long elapsedMilliseconds);
     }
 }

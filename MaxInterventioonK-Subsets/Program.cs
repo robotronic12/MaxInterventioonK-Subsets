@@ -51,11 +51,11 @@ namespace MaxInterventionK_Subsets
             Console.WriteLine(info);
             dataCollected.Enqueue(info);
 
+            Queue<IAlgorithm> algorithms = new Queue<IAlgorithm>();
+
             try
             {
                 Instance instance = new Instance(filePath);
-
-                Queue<IAlgorithm> algorithms = new Queue<IAlgorithm>();
 
                 algorithms.Enqueue(new GRASP(instance, 0.3f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
                 algorithms.Enqueue(new GRASP(instance, 0.3f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
@@ -64,10 +64,8 @@ namespace MaxInterventionK_Subsets
                 algorithms.Enqueue(new Greedy(instance));
                 algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
 
-                while (algorithms.Count > 0)
+                foreach(IAlgorithm algorithm in algorithms)
                 {
-                    IAlgorithm algorithm = algorithms.Dequeue();
-
                     Stopwatch stopwatch = Stopwatch.StartNew();
                     algorithm.Run();
                     stopwatch.Stop();
@@ -75,7 +73,7 @@ namespace MaxInterventionK_Subsets
                     string result = algorithm.PrintSummarySolution();
                     string time = $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n";
 
-                    // algorithm.SaveExperimentResults(stopwatch.ElapsedMilliseconds, "", true);
+                    algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
 
                     Console.Write(time);
                     dataCollected.Enqueue(result + time);
@@ -88,11 +86,12 @@ namespace MaxInterventionK_Subsets
                 dataCollected.Enqueue(error);
             }
 
-            SaveResults(filePath, dataCollected);
+            SaveResults(filePath, dataCollected, algorithms);
         }
 
-        private static void SaveResults(string instanceFilePath, Queue<string> dataCollected)
+        private static void SaveResults(string instanceFilePath, Queue<string> dataCollected, Queue<IAlgorithm> algorithms)
         {
+            // Text saves
             string instanceFolder = Path.GetDirectoryName(instanceFilePath);
             string resultsFolder = Path.Combine(instanceFolder, "results");
             Directory.CreateDirectory(resultsFolder);
@@ -103,6 +102,14 @@ namespace MaxInterventionK_Subsets
 
             File.WriteAllText(resultFilePath, resultText);
             Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
+
+            // Table saves
+            while (algorithms.Count > 0)
+            {
+                IAlgorithm algorithm = algorithms.Dequeue();
+
+                algorithm.SaveExperimentResults(instanceFilePath);
+            }
         }
     }
 }

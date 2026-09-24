@@ -11,6 +11,7 @@ namespace MaxInterventionK_Subsets
         protected Instance _instance;
         protected Solution _bestSolution;
         protected string _extraInfo = "";
+        protected long _elapsedMilliseconds = 0;
 
         public string _algorithmName { get; protected set; }
 
@@ -59,10 +60,15 @@ namespace MaxInterventionK_Subsets
             return str;
         }
 
-        public virtual void SaveExperimentResults(double timeMs, string path, bool overwrite)
+        public virtual void SaveExperimentResults(string path)
         {
             // Does nothing
             // If wanted to save Experiment results, override this function on the destined algorithm
+        }
+
+        public virtual void SetTimeElapsed(long elapsedMilliseconds)
+        {
+            _elapsedMilliseconds = elapsedMilliseconds;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace MaxInterventionK_Subsets
             return _bestSolution;
         }
 
-        public override void SaveExperimentResults(double timeMs, string path, bool overwrite)
+        public override void SaveExperimentResults(string path)
         {
             ExperimentResult result = new ExperimentResult(
                 _algorithmName, 
@@ -76,9 +76,9 @@ namespace MaxInterventionK_Subsets
                 _nImprovements, 
                 _bestSolution.GetMaxInterrsection(), 
                 _bestSolution.GetElementCount(), 
-                timeMs);
+                _elapsedMilliseconds);
 
-            result.SaveResultCSV(path, overwrite);
+            result.SaveResultCSV(path);
         }
 
         private Solution Construct()

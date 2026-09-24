@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MaxInterventioonK_Subsets;
 
 namespace MaxInterventionK_Subsets
 {
     internal class RandomAlgorithm : AAlgorithm
     {
-        private float _n;
+        private int _nIterations;
 
         public RandomAlgorithm(Instance instance, int n)
         {
             _algorithmName = "Random";
             _instance = instance;
-            _n = n;
+            _nIterations = n;
 
             _bestSolution = new Solution(instance);
         }
 
         public override Solution Run()
         {
-            for (int i = 0; i < _n; i++)
+            for (int i = 0; i < _nIterations; i++)
             {
                 Solution currentSolution = Construct(_instance);
 
@@ -32,6 +33,21 @@ namespace MaxInterventionK_Subsets
             }
 
             return _bestSolution;
+        }
+
+        public override void SaveExperimentResults(string path)
+        {
+            ExperimentResult result = new ExperimentResult(
+                _algorithmName,
+                "",
+                -1,
+                _nIterations,
+                0,
+                _bestSolution.GetMaxInterrsection(),
+                _bestSolution.GetElementCount(),
+                _elapsedMilliseconds);
+
+            result.SaveResultCSV(path);
         }
 
         private Solution Construct(Instance instance)

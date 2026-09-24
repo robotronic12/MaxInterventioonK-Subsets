@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using MaxInterventioonK_Subsets;
 
 namespace MaxInterventionK_Subsets
 {
@@ -21,6 +22,21 @@ namespace MaxInterventionK_Subsets
         {
             _bestSolution = Construct(_instance);
             return _bestSolution;
+        }
+
+        public override void SaveExperimentResults(string path)
+        {
+            ExperimentResult result = new ExperimentResult(
+                _algorithmName,
+                "",
+                -1,
+                1,
+                0,
+                _bestSolution.GetMaxInterrsection(),
+                _bestSolution.GetElementCount(),
+                _elapsedMilliseconds);
+
+            result.SaveResultCSV(path);
         }
 
         private Solution Construct(Instance instance)

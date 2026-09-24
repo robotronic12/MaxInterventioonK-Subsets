@@ -43,16 +43,26 @@ namespace MaxInterventioonK_Subsets
         /// Saves the result of the experiments in a csv format
         /// </summary>
         /// <param name="filePath">The file path to save the results</param>
-        /// <param name="over2rite">If true, it will overwrite an existing file if its on the same path</param>
-        public void SaveResultCSV(string filePath, bool overwrite)
+        public void SaveResultCSV(string filePath)
         {
-            StreamWriter writer = new StreamWriter(filePath);
-            bool fileExists = File.Exists(filePath);
+            string instanceFolderCSV = Path.GetDirectoryName(filePath);
+            string resultsFolderCSV = Path.Combine(instanceFolderCSV, "resultsTable");
 
-            StreamWriter streamWriter = new StreamWriter(filePath, append: true, encoding: Encoding.UTF8);
-            if (overwrite || !fileExists)
+            string resultFileName = Path.GetFileNameWithoutExtension(filePath) + ".csv";
+            string resultFilePath = Path.Combine(resultsFolderCSV, resultFileName);
+
+            Directory.CreateDirectory(resultsFolderCSV);
+
+            bool fileExists = File.Exists(resultFilePath);
+
+            StreamWriter streamWriter = new StreamWriter(
+                resultFilePath,
+                append: true,
+                encoding: Encoding.UTF8);
+
+            if (!fileExists)
             {
-                writer.WriteLine(
+                streamWriter.WriteLine(
                     "AlgorithmName;" +
                     "ImprovementType;" +
                     "Alpha;" +
@@ -63,7 +73,7 @@ namespace MaxInterventioonK_Subsets
                     "TimeMs");
             }
 
-            writer.WriteLine(
+            streamWriter.WriteLine(
                 $"{AlgorithmName};" +
                 $"{ImprovementType};" +
                 $"{Alpha.ToString(CultureInfo.InvariantCulture)};" +
@@ -72,6 +82,8 @@ namespace MaxInterventioonK_Subsets
                 $"{MaxIntersection};" +
                 $"{SolutionElements};" +
                 $"{TimeMs.ToString(CultureInfo.InvariantCulture)}");
+
+            streamWriter.Close();
         }
     }
 }
