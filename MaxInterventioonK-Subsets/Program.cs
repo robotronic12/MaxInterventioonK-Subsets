@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MaxInterventionK_Subsets
 {
@@ -31,10 +32,16 @@ namespace MaxInterventionK_Subsets
                 return;
             }
 
-            foreach (string instanceFile in instanceFiles)
+            // foreach (string instanceFile in instanceFiles)
+            // {
+            //     ExecuteInstance(instanceFile);
+            // }
+
+            // Paralelizamos cada archivo
+            Parallel.ForEach(instanceFiles, instanceFile =>
             {
                 ExecuteInstance(instanceFile);
-            }
+            });
 
             Console.WriteLine("All instances have finished.");
         }
@@ -64,7 +71,8 @@ namespace MaxInterventionK_Subsets
                 algorithms.Enqueue(new Greedy(instance));
                 algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
 
-                foreach(IAlgorithm algorithm in algorithms)
+                // Paralelizado
+                Parallel.ForEach(algorithms, algorithm =>
                 {
                     Stopwatch stopwatch = Stopwatch.StartNew();
                     algorithm.Run();
@@ -77,7 +85,22 @@ namespace MaxInterventionK_Subsets
 
                     Console.Write(time);
                     dataCollected.Enqueue(result + time);
-                }
+                });
+
+                // foreach (IAlgorithm algorithm in algorithms)
+                // {
+                //     Stopwatch stopwatch = Stopwatch.StartNew();
+                //     algorithm.Run();
+                //     stopwatch.Stop();
+                // 
+                //     string result = algorithm.PrintSummarySolution();
+                //     string time = $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n";
+                // 
+                //     algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
+                // 
+                //     Console.Write(time);
+                //     dataCollected.Enqueue(result + time);
+                // }
             }
             catch (Exception exception)
             {
@@ -101,7 +124,7 @@ namespace MaxInterventionK_Subsets
             string resultText = string.Concat(dataCollected);
 
             File.WriteAllText(resultFilePath, resultText);
-            Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
+            //Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
 
             // Table saves
             while (algorithms.Count > 0)
