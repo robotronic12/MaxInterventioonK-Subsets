@@ -5,7 +5,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal class Greedy : AAlgorithm
     {

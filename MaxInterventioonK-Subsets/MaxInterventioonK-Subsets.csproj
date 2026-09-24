@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AAlgorithm.cs" />
+    <Compile Include="BitSet.cs" />
     <Compile Include="GRASP.cs" />
     <Compile Include="GraspConstructionType.cs" />
     <Compile Include="Greedy.cs" />

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal sealed class PriorityCandidate<T>
     {

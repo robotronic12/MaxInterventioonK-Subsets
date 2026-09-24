@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal abstract class AAlgorithm : IAlgorithm
     {

@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal class Solution
     {
         private HashSet<int> _elements;
-        private HashSet<int> _commonFeatures;
+        private BitSet _commonFeatures;
         private readonly Instance _instance;
 
         public Solution(Instance instance)
         {
             _elements = new HashSet<int>();
-            _commonFeatures = new HashSet<int>();
             _instance = instance;
+            _commonFeatures = new BitSet(_instance.GetFeatureCount());
         }
 
         /// <summary>
@@ -32,11 +32,11 @@ namespace MaxInterventioonK_Subsets
                 
             if (_elements.Count == 1)
             {
-                _commonFeatures = new HashSet<int>(_instance.GetFeaturesByElement(elementId));
+                _commonFeatures = _instance.GetFeaturesBitSetByElement(elementId);
             }
             else
             {
-                _commonFeatures.IntersectWith(_instance.GetFeaturesByElement(elementId));
+                _commonFeatures.AndWith(_instance.GetFeaturesBitSetByElement(elementId));
             }
 
             return true;
@@ -57,7 +57,7 @@ namespace MaxInterventioonK_Subsets
         /// <returns>The maximum intersection value.</returns>
         public int GetMaxInterrsection()
         {
-            return _commonFeatures.Count;
+            return _commonFeatures.Count();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace MaxInterventioonK_Subsets
         /// <returns>The common features in the solution.</returns>
         public IReadOnlyList<int> GetCommonFeatures()
         {
-            return _commonFeatures.ToList();
+            return _commonFeatures.GetIdList();
         }
 
         /// <summary>
@@ -85,9 +85,11 @@ namespace MaxInterventioonK_Subsets
         /// <returns>The maximum intersection value with the specified element.</returns>
         public int GetMaxInterrsectionWithElement(int e)
         {
-            HashSet<int> features = new HashSet<int>(_instance.GetFeaturesByElement(e));
-            features.IntersectWith(_commonFeatures);
-            return features.Count;
+            BitSet actualFeatures = _commonFeatures.Clone();
+            BitSet elementFeatures = _instance.GetFeaturesBitSetByElement(e);
+
+            actualFeatures.AndWith(elementFeatures);
+            return actualFeatures.Count();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal class Program
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal class Instance
     {
@@ -11,7 +11,7 @@ namespace MaxInterventioonK_Subsets
         private  int _elementCount;
         private  int _featureCount;
         private  int _edgeCount;
-        private  List<int>[] _featuresByElement;
+        private  BitSet[] _featuresByElement;
 
         public Instance(string filePath)
         {
@@ -69,7 +69,12 @@ namespace MaxInterventioonK_Subsets
         /// <returns>A read-only list of feature identifiers.</returns>
         public IReadOnlyList<int> GetFeaturesByElement(int elementId)
         {
-            return _featuresByElement[elementId].AsReadOnly();
+            return _featuresByElement[elementId].GetIdList();
+        }
+
+        public BitSet GetFeaturesBitSetByElement(int elementId)
+        {
+            return _featuresByElement[elementId];
         }
 
         /// <summary>
@@ -100,11 +105,11 @@ namespace MaxInterventioonK_Subsets
                 _edgeCount = header[2];
                 _k = header[3];
 
-                _featuresByElement = new List<int>[_elementCount];
+                _featuresByElement = new BitSet[_elementCount];
 
                 for (int i = 0; i < _elementCount; i++)
                 {
-                    _featuresByElement[i] = new List<int>();
+                    _featuresByElement[i] = new BitSet(_featureCount);
                 }
 
                 for (int i = 0; i < _edgeCount; i++)
@@ -114,7 +119,7 @@ namespace MaxInterventioonK_Subsets
                     int elementId = edge[0] - 1;
                     int featureId = edge[1] - 1;
 
-                    _featuresByElement[elementId].Add(featureId);
+                    _featuresByElement[elementId].Set(featureId);
                 }
             }
         }

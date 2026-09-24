@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MaxInterventioonK_Subsets
+namespace MaxInterventionK_Subsets
 {
     internal class GRASP : AAlgorithm
     {
@@ -79,7 +79,7 @@ namespace MaxInterventioonK_Subsets
 
                 foreach (int i in candidateList)
                 {
-                    int gValue = GetGreedyValue(_instance, i, s);
+                    int gValue = GetGreedyValue(s, i);
                     if (gValue >= threshold)
                     {
                         restrictedCandidateList.Add(i);
@@ -163,7 +163,7 @@ namespace MaxInterventioonK_Subsets
 
             foreach (int i in candidateList)
             {
-                int gValue = GetGreedyValue(_instance, i, s);
+                int gValue = GetGreedyValue(s, i);
                 gMin = Math.Min(gMin, gValue);
                 gMax = Math.Max(gMax, gValue);
             }
@@ -176,19 +176,9 @@ namespace MaxInterventioonK_Subsets
             return gMax - _alpha * (gMax - gMin);
         }
 
-        private int GetGreedyValue(Instance instance, int elementId, Solution solution)
+        private int GetGreedyValue(Solution solution, int elementId)
         {
-            int greedyValue = 0;
-
-            foreach (int featureId in instance.GetFeaturesByElement(elementId))
-            {
-                if (solution.GetCommonFeatures().Contains(featureId))
-                {
-                    greedyValue++;
-                }
-            }
-
-            return greedyValue;
+            return solution.GetMaxInterrsectionWithElement(elementId);
         }
     }
 
