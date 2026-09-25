@@ -54,8 +54,6 @@ namespace MaxInterventionK_Subsets
         {
             // random se crea en una clase estastica para poder aplicar semilla para todos los algoritmos
             Solution s = new Solution(instance);
-
-            Random random = new Random();
             HashSet<int> candidateList = new HashSet<int>();
             for (int i = 0; i < instance.GetElementCount(); i++)
             {
@@ -64,7 +62,7 @@ namespace MaxInterventionK_Subsets
 
             while (s.GetElementCount() < instance.GetK() && candidateList.Count > 0)
             {
-                int index = random.Next(candidateList.Count);
+                int index = RandomManager.Next(candidateList.Count);
                 int element = candidateList.ElementAt(index);
                 if(s.GetMaxInterrsectionWithElement(element) > 0 || s.GetElementCount() == 0)
                 {

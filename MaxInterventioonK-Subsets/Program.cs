@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using MaxInterventioonK_Subsets;
 
 namespace MaxInterventionK_Subsets
 {
@@ -64,10 +65,10 @@ namespace MaxInterventionK_Subsets
             {
                 Instance instance = new Instance(filePath);
 
-                algorithms.Enqueue(new GRASP(instance, 0.3f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.3f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.3f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.3f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
                 algorithms.Enqueue(new Greedy(instance));
                 algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
 

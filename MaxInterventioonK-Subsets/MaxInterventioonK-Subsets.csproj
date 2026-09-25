@@ -51,6 +51,7 @@
     <Compile Include="Greedy.cs" />
     <Compile Include="IAlgorithm.cs" />
     <Compile Include="Instance.cs" />
+    <Compile Include="RandomManager.cs" />
     <Compile Include="PriorityList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

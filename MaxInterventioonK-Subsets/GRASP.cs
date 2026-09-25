@@ -36,7 +36,7 @@ namespace MaxInterventionK_Subsets
             
 
             if (_alpha < 0)
-                _alpha = (float)new Random().NextDouble();
+                _alpha = RandomManager.Value();
 
             _bestSolution = new Solution(instance);
         }
@@ -91,7 +91,7 @@ namespace MaxInterventionK_Subsets
                 candidateList.Add(i);
             }
 
-            int element = new Random().Next(_instance.GetElementCount());
+            int element = RandomManager.Next(_instance.GetElementCount());
             candidateList.Remove(element);
             s.AddElement(element);
 
@@ -127,7 +127,7 @@ namespace MaxInterventionK_Subsets
                     int randomElement;
                     do
                     {
-                        randomElementId = new Random().Next(sol.GetElementCount());
+                        randomElementId = RandomManager.Next(sol.GetElementCount());
                         randomElement = sol.GetElements().ElementAt(randomElementId);
                     } while (!blackListedElements.Add(randomElement));
 
@@ -226,7 +226,7 @@ namespace MaxInterventionK_Subsets
 
         private int BaseGrasp(Solution s, HashSet<int> candidateList, HashSet<int> restrictedCandidateList)
         {
-            int index = new Random().Next(restrictedCandidateList.Count);
+            int index = RandomManager.Next(restrictedCandidateList.Count);
             int element = restrictedCandidateList.ElementAt(index);
 
             restrictedCandidateList.Remove(element);
@@ -239,7 +239,7 @@ namespace MaxInterventionK_Subsets
         private int BiasedGrasp(Solution s, HashSet<int> candidateList, int totalGreedyValue, PriorityList<int> priorityList)
         {
             int element = -1;
-            float r = new Random().Next(0, totalGreedyValue) * _alpha;
+            float r = RandomManager.Next(totalGreedyValue) * _alpha;
             int acumulatedGreedyValue = 0;
             while (element < 0)
             {
