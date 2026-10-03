@@ -44,6 +44,7 @@ namespace MaxInterventionK_Subsets
                 ExecuteInstance(instanceFile);
             });
 
+
             Console.WriteLine("All instances have finished.");
         }
 
@@ -65,43 +66,27 @@ namespace MaxInterventionK_Subsets
             {
                 Instance instance = new Instance(filePath);
 
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new Greedy(instance));
-                algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                // algorithms.Enqueue(new Greedy(instance));
+                // algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
 
-                // Paralelizado
-                Parallel.ForEach(algorithms, algorithm =>
+                foreach (IAlgorithm algorithm in algorithms)
                 {
                     Stopwatch stopwatch = Stopwatch.StartNew();
                     algorithm.Run();
                     stopwatch.Stop();
-
+                
                     string result = algorithm.PrintSummarySolution();
                     string time = $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n";
-
+                
                     algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
-
+                
                     Console.Write(time);
                     dataCollected.Enqueue(result + time);
-                });
-
-                // foreach (IAlgorithm algorithm in algorithms)
-                // {
-                //     Stopwatch stopwatch = Stopwatch.StartNew();
-                //     algorithm.Run();
-                //     stopwatch.Stop();
-                // 
-                //     string result = algorithm.PrintSummarySolution();
-                //     string time = $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n";
-                // 
-                //     algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
-                // 
-                //     Console.Write(time);
-                //     dataCollected.Enqueue(result + time);
-                // }
+                }
             }
             catch (Exception exception)
             {
