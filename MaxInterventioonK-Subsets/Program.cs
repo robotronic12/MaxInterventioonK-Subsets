@@ -11,13 +11,24 @@ namespace MaxInterventionK_Subsets
     {
         private static void Main(string[] args)
         {
+            string folderPath;
             if (args.Length == 0)
             {
-                Console.WriteLine("Usage: MaxInterventioonK-Subsets.exe <folder-path>");
-                return;
+                string solutionDir = Path.GetFullPath(
+                    Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
+                );
+
+                string resultsDir = Path.Combine(solutionDir, "instances", "type1");
+
+                Console.WriteLine($"Taken default folder: {resultsDir}");
+                folderPath = resultsDir;
+            }
+            else
+            {
+                folderPath = args[0];
             }
 
-            string folderPath = args[0];
+            
             if (!Directory.Exists(folderPath))
             {
                 Console.WriteLine("The specified folder does not exist: " + folderPath);
@@ -98,26 +109,26 @@ namespace MaxInterventionK_Subsets
             SaveResults(filePath, dataCollected, algorithms);
         }
 
-        private static void SaveResults(string instanceFilePath, Queue<string> dataCollected, Queue<IAlgorithm> algorithms)
+        private static void SaveResults(string path, Queue<string> dataCollected, Queue<IAlgorithm> algorithms)
         {
             // Text saves
-            string instanceFolder = Path.GetDirectoryName(instanceFilePath);
-            string resultsFolder = Path.Combine(instanceFolder, "results");
-            Directory.CreateDirectory(resultsFolder);
-
-            string resultFileName = Path.GetFileNameWithoutExtension(instanceFilePath) + "_results.txt";
-            string resultFilePath = Path.Combine(resultsFolder, resultFileName);
-            string resultText = string.Concat(dataCollected);
-
-            File.WriteAllText(resultFilePath, resultText);
-            //Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
+            // string instanceFolder = Path.GetDirectoryName(instanceFilePath);
+            // string resultsFolder = Path.Combine(instanceFolder, "results");
+            // Directory.CreateDirectory(resultsFolder);
+            // 
+            // string resultFileName = Path.GetFileNameWithoutExtension(instanceFilePath) + "_results.txt";
+            // string resultFilePath = Path.Combine(resultsFolder, resultFileName);
+            // string resultText = string.Concat(dataCollected);
+            // 
+            // File.WriteAllText(resultFilePath, resultText);
+            // Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
 
             // Table saves
             while (algorithms.Count > 0)
             {
                 IAlgorithm algorithm = algorithms.Dequeue();
 
-                algorithm.SaveExperimentResults(instanceFilePath);
+                algorithm.SaveExperimentResults(path);
             }
         }
     }

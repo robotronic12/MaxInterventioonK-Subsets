@@ -1,0 +1,5 @@
+﻿AlgorithmName;ImprovementType;Alpha;Iterations;Improvements;MaxIntersection;SolutionElements;TimeMs
+GRASP;FirstImprovement;0.75;100;3;2;36;11277
+GRASP;BestImprovement;0.75;100;3;2;36;10201
+BiasedGRASP;FirstImprovement;0.75;100;3;6;36;19956
+BiasedGRASP;BestImprovement;0.75;100;3;6;36;137297

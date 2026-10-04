@@ -45,8 +45,13 @@ namespace MaxInterventioonK_Subsets
         /// <param name="filePath">The file path to save the results</param>
         public void SaveResultCSV(string filePath)
         {
-            string instanceFolderCSV = Path.GetDirectoryName(filePath);
-            string resultsFolderCSV = Path.Combine(instanceFolderCSV, "resultsTable");
+
+            string instanceFolderCSV = Path.GetFullPath(
+                    Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
+                );
+            instanceFolderCSV = Path.Combine(instanceFolderCSV, "results");
+
+            string resultsFolderCSV = Path.Combine(instanceFolderCSV, "IndividualResults");
 
             string resultFileName = Path.GetFileNameWithoutExtension(filePath) + ".csv";
             string resultFilePath = Path.Combine(resultsFolderCSV, resultFileName);

@@ -16,6 +16,8 @@ namespace MaxInterventionK_Subsets
         public string _algorithmName { get; protected set; }
 
         public abstract Solution Run();
+        public abstract void SaveExperimentResults(string path);
+
         public string PrintSolution()
         {
             string str = string.Empty;
@@ -58,12 +60,6 @@ namespace MaxInterventionK_Subsets
             Console.Write(str);
 
             return str;
-        }
-
-        public virtual void SaveExperimentResults(string path)
-        {
-            // Does nothing
-            // If wanted to save Experiment results, override this function on the destined algorithm
         }
 
         public virtual void SetTimeElapsed(long elapsedMilliseconds)
