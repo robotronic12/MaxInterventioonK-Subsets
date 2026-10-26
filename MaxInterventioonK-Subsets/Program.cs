@@ -77,12 +77,12 @@ namespace MaxInterventionK_Subsets
             {
                 Instance instance = new Instance(filePath);
 
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                // algorithms.Enqueue(new Greedy(instance));
-                // algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
+                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new Greedy(instance));
+                algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
 
                 foreach (IAlgorithm algorithm in algorithms)
                 {
