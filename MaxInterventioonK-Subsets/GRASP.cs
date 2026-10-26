@@ -91,10 +91,7 @@ namespace MaxInterventionK_Subsets
                 candidateList.Add(i);
             }
 
-            int element = RandomManager.Next(_instance.GetElementCount());
-            candidateList.Remove(element);
-            s.AddElement(element);
-
+            AddRandomElementToSolution(s, candidateList);
             CalculateNextElement(s, candidateList);
 
             return s;
@@ -202,6 +199,17 @@ namespace MaxInterventionK_Subsets
                         priorityList.Add(i, gValue);
                     }
                 }
+
+                if(totalGreedyValue == 0)
+                {
+                    // No candidates have a greedy value greater than the threshold
+                    // We add a random element from the candidate list to the solution
+                    // Then, we continue the loop and return the element added to the solution
+
+                    element = AddRandomElementToSolution(s, candidateList);
+                    continue;
+                }
+
                 if (restrictedCandidateList.Count == 0)
                     break;
 
@@ -226,6 +234,11 @@ namespace MaxInterventionK_Subsets
 
         private int BaseGrasp(Solution s, HashSet<int> candidateList, HashSet<int> restrictedCandidateList)
         {
+            if(restrictedCandidateList.Count == 0)
+            {
+                throw new InvalidOperationException($"Error: No candidates available to select an element.");
+            }
+
             int index = RandomManager.Next(restrictedCandidateList.Count);
             int element = restrictedCandidateList.ElementAt(index);
 
@@ -270,7 +283,14 @@ namespace MaxInterventionK_Subsets
 
             if (gMin == int.MaxValue)
             {
-                throw new InvalidOperationException("No candidates available to calculate threshold.");
+                string info = $"\tCurrent file: {_instance.GetFileName()}\n" +
+                    $"\tCurrent solution: {s.GetElements().Count()} elements\n" +
+                    $"\tCandidate list: {candidateList.Count} elements\n" +
+                    $"\tAlgorithm: {_algorithmName}\n" +
+                    $"\tImprovement Type: {_improvementType}";
+                
+                throw new InvalidOperationException($"{info}\n" +
+                    $"\n\tError: No candidates available to calculate threshold.");
             }
 
             return gMax - _alpha * (gMax - gMin);
@@ -279,6 +299,15 @@ namespace MaxInterventionK_Subsets
         private int GetGreedyValue(Solution solution, int elementId)
         {
             return solution.GetMaxInterrsectionWithElement(elementId);
+        }
+
+        private int AddRandomElementToSolution(Solution s, HashSet<int> candidateList)
+        {
+            int index = RandomManager.Next(candidateList.Count);
+            int element = candidateList.ElementAt(index);
+            candidateList.Remove(element);
+            s.AddElement(element);
+            return element;
         }
     }
 

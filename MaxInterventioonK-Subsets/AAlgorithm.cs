@@ -57,7 +57,7 @@ namespace MaxInterventionK_Subsets
             str += $"Elements in solution: {_bestSolution.GetElementCount()}\n";
             str += $"Max Intersections found: {_bestSolution.GetMaxInterrsection()}\n";
 
-            Console.Write(str);
+            // Console.Write(str);
 
             return str;
         }

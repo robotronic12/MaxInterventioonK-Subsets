@@ -6,15 +6,16 @@ namespace MaxInterventionK_Subsets
 {
     internal class Instance
     {
-
+        private string _filePath;
         private int _k;
-        private  int _elementCount;
-        private  int _featureCount;
-        private  int _edgeCount;
-        private  BitSet[] _featuresByElement;
+        private int _elementCount;
+        private int _featureCount;
+        private int _edgeCount;
+        private BitSet[] _featuresByElement;
 
         public Instance(string filePath)
         {
+            _filePath = filePath;
             try
             {
                 LoadInstanceFromFile(filePath);
@@ -82,6 +83,7 @@ namespace MaxInterventionK_Subsets
         /// </summary>
         public void WriteInConsole()
         {
+            Console.WriteLine($"File Path: {GetFileName()}");
             Console.WriteLine($"Element Count: {_elementCount}");
             Console.WriteLine($"Feature Count: {_featureCount}");
             Console.WriteLine($"Edge Count: {_edgeCount}");
@@ -90,6 +92,15 @@ namespace MaxInterventionK_Subsets
             {
                 Console.WriteLine($"Element {elementId}: Features [{string.Join(", ", _featuresByElement[elementId])}]");
             }
+        }
+
+        /// <summary>
+        /// Gets the file name of the instance file.
+        /// </summary>
+        /// <returns>The file name of the instance file.</returns>
+        public string GetFileName()
+        {
+            return Path.GetFileName(_filePath);
         }
         #endregion
 

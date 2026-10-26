@@ -68,7 +68,7 @@ namespace MaxInterventionK_Subsets
                 + $"Executing: {Path.GetFileName(filePath)}\n"
                 + "==============================================\n";
 
-            Console.WriteLine(info);
+            // Console.WriteLine(info);
             dataCollected.Enqueue(info);
 
             Queue<IAlgorithm> algorithms = new Queue<IAlgorithm>();
@@ -81,8 +81,8 @@ namespace MaxInterventionK_Subsets
                 algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
                 algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
                 algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new Greedy(instance));
-                algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
+                // algorithms.Enqueue(new Greedy(instance));
+                // algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
 
                 foreach (IAlgorithm algorithm in algorithms)
                 {
@@ -95,13 +95,15 @@ namespace MaxInterventionK_Subsets
                 
                     algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
                 
-                    Console.Write(time);
+                    // Console.Write(time);
                     dataCollected.Enqueue(result + time);
                 }
+
+                Console.WriteLine($"Finished processing instance succesfully: {Path.GetFileName(filePath)}");
             }
             catch (Exception exception)
             {
-                string error = $"Error processing instance: {exception.Message}\n";
+                string error = $"Error processing instance: {Path.GetFileName(filePath)}, Exception Message:\n {exception.Message}\n";
                 Console.WriteLine(error);
                 dataCollected.Enqueue(error);
             }
