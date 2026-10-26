@@ -180,7 +180,7 @@ namespace MaxInterventionK_Subsets
         private int CalculateNextElement(Solution s, HashSet<int> candidateList)
         {
             int element = -1;
-            while (s.GetElementCount() < _instance.GetK())
+            while (s.GetElementCount() < _instance.GetK() && candidateList.Count > 0)
             {
                 float threshold = CalculateThreshold(s, candidateList);
 
@@ -207,11 +207,15 @@ namespace MaxInterventionK_Subsets
                     // Then, we continue the loop and return the element added to the solution
 
                     element = AddRandomElementToSolution(s, candidateList);
+
+                    if (element == -1)
+                        break;
+
                     continue;
                 }
 
-                if (restrictedCandidateList.Count == 0)
-                    break;
+                // if (totalGreedyValue == 0)
+                //     break;
 
                 
                 switch (_graspType)
@@ -303,10 +307,15 @@ namespace MaxInterventionK_Subsets
 
         private int AddRandomElementToSolution(Solution s, HashSet<int> candidateList)
         {
+            if (candidateList.Count == 0)
+                return -1;
+
             int index = RandomManager.Next(candidateList.Count);
             int element = candidateList.ElementAt(index);
+
             candidateList.Remove(element);
             s.AddElement(element);
+
             return element;
         }
     }

@@ -50,11 +50,18 @@ namespace MaxInterventionK_Subsets
             // }
 
             // Paralelizamos cada archivo
+            // for(int i = 0; i < 5; i++)
+            // {
+            //     Parallel.ForEach(instanceFiles, instanceFile =>
+            //     {
+            //         ExecuteInstance(instanceFile);
+            //     });
+            // }
+
             Parallel.ForEach(instanceFiles, instanceFile =>
             {
                 ExecuteInstance(instanceFile);
             });
-
 
             Console.WriteLine("All instances have finished.");
         }
@@ -77,12 +84,24 @@ namespace MaxInterventionK_Subsets
             {
                 Instance instance = new Instance(filePath);
 
-                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                // algorithms.Enqueue(new Greedy(instance));
-                // algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
+                // Algoritms
+                algorithms.Enqueue(new Greedy(instance));
+                algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
+
+                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
 
                 foreach (IAlgorithm algorithm in algorithms)
                 {
