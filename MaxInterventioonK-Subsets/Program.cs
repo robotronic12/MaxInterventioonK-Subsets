@@ -78,59 +78,60 @@ namespace MaxInterventionK_Subsets
             // Console.WriteLine(info);
             dataCollected.Enqueue(info);
 
-            Queue<IAlgorithm> algorithms = new Queue<IAlgorithm>();
+            List<IAlgorithm> algorithms = new List<IAlgorithm>();
 
-            try
+            Instance instance = new Instance(filePath);
+
+            // Algoritms
+            algorithms.Add(new Greedy(instance));
+            algorithms.Add(new RandomAlgorithm(instance, 1000));
+
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+
+            foreach (IAlgorithm algorithm in algorithms)
             {
-                Instance instance = new Instance(filePath);
-
-                // Algoritms
-                algorithms.Enqueue(new Greedy(instance));
-                algorithms.Enqueue(new RandomAlgorithm(instance, 1000));
-
-                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Enqueue(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-
-                foreach (IAlgorithm algorithm in algorithms)
+                try
                 {
                     Stopwatch stopwatch = Stopwatch.StartNew();
                     algorithm.Run();
                     stopwatch.Stop();
-                
+
                     string result = algorithm.PrintSummarySolution();
                     string time = $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n";
-                
+
                     algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
-                
+
                     // Console.Write(time);
                     dataCollected.Enqueue(result + time);
                 }
+                catch (Exception exception)
+                {
+                    algorithms.Remove(algorithm);
 
-                Console.WriteLine($"Finished processing instance succesfully: {Path.GetFileName(filePath)}");
-            }
-            catch (Exception exception)
-            {
-                string error = $"Error processing instance: {Path.GetFileName(filePath)}, Exception Message:\n {exception.Message}\n";
-                Console.WriteLine(error);
-                dataCollected.Enqueue(error);
+                    string error = $"Error processing instance: {Path.GetFileName(filePath)}, Exception Message:\n {exception.Message}\n";
+                    Console.WriteLine(error);
+                    dataCollected.Enqueue(error);
+                }
             }
 
+            Console.WriteLine($"Finished processing instance succesfully: {Path.GetFileName(filePath)}");
             SaveResults(filePath, dataCollected, algorithms);
         }
 
-        private static void SaveResults(string path, Queue<string> dataCollected, Queue<IAlgorithm> algorithms)
+        private static void SaveResults(string path, Queue<string> dataCollected, List<IAlgorithm> algorithms)
         {
             // Text saves
             // string instanceFolder = Path.GetDirectoryName(instanceFilePath);
@@ -145,10 +146,8 @@ namespace MaxInterventionK_Subsets
             // Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
 
             // Table saves
-            while (algorithms.Count > 0)
+            foreach (IAlgorithm algorithm in algorithms)
             {
-                IAlgorithm algorithm = algorithms.Dequeue();
-
                 algorithm.SaveExperimentResults(path);
             }
         }
