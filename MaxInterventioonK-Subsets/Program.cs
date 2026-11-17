@@ -68,18 +68,8 @@ namespace MaxInterventionK_Subsets
 
         private static void ExecuteInstance(string filePath)
         {
-            Queue<string> dataCollected = new Queue<string>();
-
-            string info =
-                "==============================================\n"
-                + $"Executing: {Path.GetFileName(filePath)}\n"
-                + "==============================================\n";
-
-            // Console.WriteLine(info);
-            dataCollected.Enqueue(info);
-
+            Queue<string> crashReports = new Queue<string>();
             List<IAlgorithm> algorithms = new List<IAlgorithm>();
-
             Instance instance = new Instance(filePath);
 
             // TAREAS
@@ -100,22 +90,45 @@ namespace MaxInterventionK_Subsets
 
             // Algoritms
             algorithms.Add(new Greedy(instance));
-            algorithms.Add(new RandomAlgorithm(instance, 1000));
+            for (int i = 0; i < 10; i++)
+                algorithms.Add(new RandomAlgorithm(instance, 1000));
 
-            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+            for (int i = 0; i < 10; i++)
+            {
+                // Experiment 1
+                algorithms.Add(new GRASP(instance, 0.25f, 100, GraspType.GRASP));
+                algorithms.Add(new GRASP(instance, 0.5f, 100, GraspType.GRASP));
+                algorithms.Add(new GRASP(instance, 0.75f, 100, GraspType.GRASP));
+                algorithms.Add(new GRASP(instance, -1f, 100, GraspType.GRASP));
 
-            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-            
-            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                // Experiment 2
+                algorithms.Add(new GRASP(instance, 0.25f, 100, GraspType.BiasedGRASP));
+                algorithms.Add(new GRASP(instance, 0.5f, 100, GraspType.BiasedGRASP));
+                algorithms.Add(new GRASP(instance, 0.75f, 100, GraspType.BiasedGRASP));
+                algorithms.Add(new GRASP(instance, -1f, 100, GraspType.BiasedGRASP));
+
+                // Experiment 3
+                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+
+                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+
+                // Experiment 4
+                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+
+                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+            }
 
             foreach (IAlgorithm algorithm in algorithms)
             {
@@ -129,9 +142,6 @@ namespace MaxInterventionK_Subsets
                     string time = $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n";
 
                     algorithm.SetTimeElapsed(stopwatch.ElapsedMilliseconds);
-
-                    // Console.Write(time);
-                    dataCollected.Enqueue(result + time);
                 }
                 catch (Exception exception)
                 {
@@ -139,32 +149,36 @@ namespace MaxInterventionK_Subsets
 
                     string error = $"Error processing instance: {Path.GetFileName(filePath)}, Exception Message:\n {exception.Message}\n";
                     Console.WriteLine(error);
-                    dataCollected.Enqueue(error);
+                    crashReports.Enqueue(error);
                 }
             }
 
             Console.WriteLine($"Finished processing instance succesfully: {Path.GetFileName(filePath)}");
-            SaveResults(filePath, dataCollected, algorithms);
+            SaveResults(filePath, crashReports, algorithms);
         }
 
-        private static void SaveResults(string path, Queue<string> dataCollected, List<IAlgorithm> algorithms)
+        private static void SaveResults(string path, Queue<string> crashReports, List<IAlgorithm> algorithms)
         {
-            // Text saves
-            // string instanceFolder = Path.GetDirectoryName(instanceFilePath);
-            // string resultsFolder = Path.Combine(instanceFolder, "results");
-            // Directory.CreateDirectory(resultsFolder);
-            // 
-            // string resultFileName = Path.GetFileNameWithoutExtension(instanceFilePath) + "_results.txt";
-            // string resultFilePath = Path.Combine(resultsFolder, resultFileName);
-            // string resultText = string.Concat(dataCollected);
-            // 
-            // File.WriteAllText(resultFilePath, resultText);
-            // Console.WriteLine($"\nResults saved to: {resultFilePath}\n");
-
             // Table saves
             foreach (IAlgorithm algorithm in algorithms)
             {
                 algorithm.SaveExperimentResults(path);
+            }
+
+            // Error logs saves
+            if (crashReports.Count > 0)
+            {
+                string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                string logFilePath = Path.Combine(path, $"ErrorLog_{timestamp}.txt");
+
+                using (StreamWriter writer = new StreamWriter(logFilePath))
+                {
+                    while (crashReports.Count > 0)
+                    {
+                        string error = crashReports.Dequeue();
+                        writer.WriteLine(error);
+                    }
+                }
             }
         }
     }

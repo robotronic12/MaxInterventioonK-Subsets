@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MaxInterventionK_Subsets
 {
@@ -79,6 +80,18 @@ namespace MaxInterventionK_Subsets
         public PriorityCandidate<T> Remove()
         {
             PriorityCandidate<T> candidate = Peek();
+            _items.Remove(candidate);
+            return candidate;
+        }
+
+        public PriorityCandidate<T> GetElementAt(int index)
+        {
+            return _items.ElementAt(index);
+        }
+
+        public PriorityCandidate<T> RemoveElementAt(int index)
+        {
+            PriorityCandidate<T> candidate = GetElementAt(index);
             _items.Remove(candidate);
             return candidate;
         }

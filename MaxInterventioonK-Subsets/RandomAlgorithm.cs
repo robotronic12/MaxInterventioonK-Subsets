@@ -10,12 +10,14 @@ namespace MaxInterventionK_Subsets
     internal class RandomAlgorithm : AAlgorithm
     {
         private int _nIterations;
+        private RandomManager _randomManager;
 
         public RandomAlgorithm(Instance instance, int n)
         {
             _algorithmName = "Random";
             _instance = instance;
             _nIterations = n;
+            _randomManager = new RandomManager();
 
             _bestSolution = new Solution(instance);
         }
@@ -62,7 +64,7 @@ namespace MaxInterventionK_Subsets
 
             while (s.GetElementCount() < instance.GetK() && candidateList.Count > 0)
             {
-                int index = RandomManager.Next(candidateList.Count);
+                int index = _randomManager.Next(candidateList.Count);
                 int element = candidateList.ElementAt(index);
                 if(s.GetMaxInterrsectionWithElement(element) > 0 || s.GetElementCount() == 0)
                 {

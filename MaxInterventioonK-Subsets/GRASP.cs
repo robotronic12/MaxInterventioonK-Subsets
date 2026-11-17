@@ -15,6 +15,7 @@ namespace MaxInterventionK_Subsets
         private float _alpha;
         private int _nIterations;
         private int _nImprovements;
+        private RandomManager _random;
         private GraspType _graspType;
         private ImprovementType _improvementType;
 
@@ -33,21 +34,30 @@ namespace MaxInterventionK_Subsets
             _extraInfo = $"Improvement Type: {_improvementType.ToString()}\n";
 
             _instance = instance;
-            
+
+            _random = new RandomManager();
 
             if (_alpha < 0)
-                _alpha = RandomManager.Value();
+                _alpha = _random.Value();
+
+            if (GraspType == GraspType.BiasedGRASP)
+                _random.SetRandomType(RandomType.Geometric);            
 
             _bestSolution = new Solution(instance);
         }
 
         public GRASP(Instance instance, float alpha, int nIterations, int nImprovements) : 
-            this(instance, alpha, nIterations, nImprovements, GraspType.GRASP, ImprovementType.FirstImprovement)
+            this(instance, alpha, nIterations, nImprovements, GraspType.GRASP, ImprovementType.None)
         {
         }
 
         public GRASP(Instance instance, float alpha) : 
-            this(instance, alpha, 100, 1, GraspType.GRASP, ImprovementType.FirstImprovement)
+            this(instance, alpha, 100, 1, GraspType.GRASP, ImprovementType.None)
+        {
+        }
+
+        public GRASP(Instance instance, float alpha, int nIterations, GraspType GraspType) :
+            this(instance, alpha, nIterations, -1, GraspType, ImprovementType.None)
         {
         }
 
@@ -56,7 +66,9 @@ namespace MaxInterventionK_Subsets
             for (int i = 0; i < _nIterations; i++)
             {
                 Solution currentSolution = Construct();
-                currentSolution = Improve(currentSolution);
+
+                if(_improvementType != ImprovementType.None)
+                    currentSolution = Improve(currentSolution);
 
                 if (currentSolution.GetMaxInterrsection() > _bestSolution.GetMaxInterrsection())
                 {
@@ -124,7 +136,7 @@ namespace MaxInterventionK_Subsets
                     int randomElement;
                     do
                     {
-                        randomElementId = RandomManager.Next(sol.GetElementCount());
+                        randomElementId = _random.Next(sol.GetElementCount());
                         randomElement = sol.GetElements().ElementAt(randomElementId);
                     } while (!blackListedElements.Add(randomElement));
 
@@ -217,59 +229,25 @@ namespace MaxInterventionK_Subsets
                 // if (totalGreedyValue == 0)
                 //     break;
 
-                
-                switch (_graspType)
-                {
-                    case GraspType.GRASP:
-                        element = BaseGrasp(s, candidateList, restrictedCandidateList);
-                        break;
-
-                    case GraspType.BiasedGRASP:
-                        element = BiasedGrasp(s, candidateList, totalGreedyValue, priorityList);
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }  
+                element = CalculateNextRandomElement(s, candidateList, priorityList);
             }
 
             return element;
         }
 
-        private int BaseGrasp(Solution s, HashSet<int> candidateList, HashSet<int> restrictedCandidateList)
+        private int CalculateNextRandomElement(Solution s, HashSet<int> candidateList, PriorityList<int> priorityList)
         {
-            if(restrictedCandidateList.Count == 0)
+            if(priorityList.Count == 0)
             {
                 throw new InvalidOperationException($"Error: No candidates available to select an element.");
             }
 
-            int index = RandomManager.Next(restrictedCandidateList.Count);
-            int element = restrictedCandidateList.ElementAt(index);
-
-            restrictedCandidateList.Remove(element);
-            candidateList.Remove(element);
-            s.AddElement(element);
-
-            return element;
-        }
-
-        private int BiasedGrasp(Solution s, HashSet<int> candidateList, int totalGreedyValue, PriorityList<int> priorityList)
-        {
-            int element = -1;
-            float r = RandomManager.Next(totalGreedyValue) * _alpha;
-            int acumulatedGreedyValue = 0;
-            while (element < 0)
-            {
-                var candidate = priorityList.Remove();
-                acumulatedGreedyValue += candidate.Priority;
-                if (acumulatedGreedyValue >= r)
-                {
-                    element = candidate.ElementId;
-                }
-            }
+            int index = _random.Next(priorityList.Count);
+            int element = priorityList.RemoveElementAt(index).ElementId;
 
             candidateList.Remove(element);
             s.AddElement(element);
+
             return element;
         }
 
@@ -310,7 +288,7 @@ namespace MaxInterventionK_Subsets
             if (candidateList.Count == 0)
                 return -1;
 
-            int index = RandomManager.Next(candidateList.Count);
+            int index = _random.Next(candidateList.Count);
             int element = candidateList.ElementAt(index);
 
             candidateList.Remove(element);
@@ -329,6 +307,7 @@ namespace MaxInterventionK_Subsets
     public enum ImprovementType
     {
         FirstImprovement,
-        BestImprovement
+        BestImprovement,
+        None
     }
 }

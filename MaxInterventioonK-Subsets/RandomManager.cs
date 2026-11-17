@@ -6,45 +6,105 @@ using System.Threading.Tasks;
 
 namespace MaxInterventioonK_Subsets
 {
-    public static class RandomManager
+    public class RandomManager
     {
-        private static Random _random = new Random();
-        private static int _seed = 1234;
+        private static Random _random;
+        private static int _seed;
+        private static RandomType _randomType;
 
-        public static void SetSeed(int seed)
+        public RandomManager()
+        {
+            _seed = 1234;
+            _random = new Random(_seed);
+            _randomType = RandomType.Default;
+        }
+
+        public void SetSeed(int seed)
         {
             _random = new Random(seed);
             _seed = seed;
         }
 
-        public static int GetSeed()
+        public void SetRandomType(RandomType randomType)
+        {
+            _randomType = randomType;
+        }
+
+        public int GetSeed()
         {
             return _seed;
         }
 
-        public static int Next(int min, int max)
+        public int Next(int min, int max)
         {
-            return _random.Next(min, max);
+            switch (_randomType)
+            {
+                case RandomType.Geometric:
+                    return Math.Min(_random.Next(min, max), _random.Next(min, max));
+
+                case RandomType.Default:
+                    return _random.Next(min, max);
+
+                default:
+                    throw new NotImplementedException();
+            }
+            
         }
 
-        public static int Next(int max)
+        public int Next(int max)
         {
-            return _random.Next(max);
+            switch (_randomType)
+            {
+                case RandomType.Geometric:
+                    return Math.Min(_random.Next(max), _random.Next(max));
+
+                case RandomType.Default:
+                    return _random.Next(max);
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
-        public static float Value()
+        public float Value()
         {
-            return (float)_random.NextDouble();
+            switch (_randomType)
+            {
+                case RandomType.Geometric:
+                    return Math.Min((float)_random.NextDouble(), (float)_random.NextDouble());
+
+                case RandomType.Default:
+                    return (float)_random.NextDouble();
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
-        public static double ValueDouble()
+        public double ValueDouble()
         {
-            return _random.NextDouble();
+            switch (_randomType)
+            {
+                case RandomType.Geometric:
+                    return Math.Min(_random.NextDouble(), _random.NextDouble());
+
+                case RandomType.Default:
+                    return _random.NextDouble();
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
-        public static bool Bool()
+        public bool Bool()
         {
             return _random.Next(0, 2) == 1;
         }
+    }
+
+    public enum RandomType
+    {
+        Default,
+        Geometric
     }
 }
