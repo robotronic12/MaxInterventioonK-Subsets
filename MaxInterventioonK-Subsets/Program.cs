@@ -11,7 +11,7 @@ namespace MaxInterventionK_Subsets
     {
         private static void Main(string[] args)
         {
-            string folderPath;
+            string targetPath;
             if (args.Length == 0)
             {
                 string solutionDir = Path.GetFullPath(
@@ -21,42 +21,42 @@ namespace MaxInterventionK_Subsets
                 string resultsDir = Path.Combine(solutionDir, "instances", "type1");
 
                 Console.WriteLine($"Taken default folder: {resultsDir}");
-                folderPath = resultsDir;
+                targetPath = resultsDir;
             }
             else
             {
-                folderPath = args[0];
+                targetPath = args[0];
             }
 
-            
-            if (!Directory.Exists(folderPath))
+            string[] instanceFiles;
+
+            if (File.Exists(targetPath))
             {
-                Console.WriteLine("The specified folder does not exist: " + folderPath);
+                // Caso 1: La ruta es un único archivo
+                if (!targetPath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("The specified file is not a .txt file.");
+                    return;
+                }
+                instanceFiles = new string[] { targetPath };
+            }
+            else if (Directory.Exists(targetPath))
+            {
+                // Caso 2: La ruta es una carpeta (busca en ella y en todas sus subcarpetas)
+                instanceFiles = Directory.GetFiles(targetPath, "*.txt", SearchOption.AllDirectories);
+                Array.Sort(instanceFiles);
+
+                if (instanceFiles.Length == 0)
+                {
+                    Console.WriteLine("The folder and its subfolders do not contain any .txt files.");
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("The specified file or folder does not exist: " + targetPath);
                 return;
             }
-
-            string[] instanceFiles = Directory.GetFiles(folderPath, "*.txt", SearchOption.TopDirectoryOnly);
-            Array.Sort(instanceFiles);
-
-            if (instanceFiles.Length == 0)
-            {
-                Console.WriteLine("The folder does not contain any .txt files.");
-                return;
-            }
-
-            // foreach (string instanceFile in instanceFiles)
-            // {
-            //     ExecuteInstance(instanceFile);
-            // }
-
-            // Paralelizamos cada archivo
-            // for(int i = 0; i < 5; i++)
-            // {
-            //     Parallel.ForEach(instanceFiles, instanceFile =>
-            //     {
-            //         ExecuteInstance(instanceFile);
-            //     });
-            // }
 
             Parallel.ForEach(instanceFiles, instanceFile =>
             {
@@ -65,6 +65,7 @@ namespace MaxInterventionK_Subsets
 
             Console.WriteLine("All instances have finished.");
         }
+
 
         private static void ExecuteInstance(string filePath)
         {
