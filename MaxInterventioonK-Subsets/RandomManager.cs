@@ -9,7 +9,7 @@ namespace MaxInterventioonK_Subsets
     public static class RandomManager
     {
         private static Random _random = new Random();
-        private static int _seed = -1;
+        private static int _seed = 1234;
 
         public static void SetSeed(int seed)
         {

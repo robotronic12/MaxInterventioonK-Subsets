@@ -82,6 +82,22 @@ namespace MaxInterventionK_Subsets
 
             Instance instance = new Instance(filePath);
 
+            // TAREAS
+
+            /*
+             * Cambiar random a distribucion geometrica
+             * cambiar biased GRASP
+             * 
+             * Experimento 1 - Solo construcción:
+             *  - GRASP 0.25 vs GRASP 0.5 vs GRASP 0.75 vs random
+             * Experimento 2 - Solo construcción también:
+             *   - Biased GRASP 0.25 vs 0.5 vs 0.75 vs random
+             * Experimento 3 - Construcción + LS = Experimento 1 + LS FI vs Experimento 1 + LS BI
+             *   - GRASP 0.25 vs GRASP 0.5 vs GRASP 0.75 vs random
+             * Experimento 4 - Construcción + LS = Experimento 2 + LS FI vs Experimento 2 + LS BI
+             *  - Biased GRASP 0.25 vs 0.5 vs 0.75 vs random
+             */
+
             // Algoritms
             algorithms.Add(new Greedy(instance));
             algorithms.Add(new RandomAlgorithm(instance, 1000));
@@ -95,7 +111,7 @@ namespace MaxInterventionK_Subsets
             algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
             algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
             algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-
+            
             algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
             algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
             algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
