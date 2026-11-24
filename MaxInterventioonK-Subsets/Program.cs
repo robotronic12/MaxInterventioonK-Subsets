@@ -89,47 +89,44 @@ namespace MaxInterventionK_Subsets
              *  - Biased GRASP 0.25 vs 0.5 vs 0.75 vs random
              */
 
-            // Algoritms
-            algorithms.Add(new Greedy(instance));
-            for (int i = 0; i < 10; i++)
-                algorithms.Add(new RandomAlgorithm(instance, 1000));
+            // Experiment 0
+            algorithms.Add(new Greedy(instance)); 
+            algorithms.Add(new RandomAlgorithm(instance, 1000));
 
-            for (int i = 0; i < 10; i++)
-            {
-                // Experiment 1
-                algorithms.Add(new GRASP(instance, 0.25f, 100, GraspType.GRASP));
-                algorithms.Add(new GRASP(instance, 0.5f, 100, GraspType.GRASP));
-                algorithms.Add(new GRASP(instance, 0.75f, 100, GraspType.GRASP));
-                algorithms.Add(new GRASP(instance, -1f, 100, GraspType.GRASP));
 
-                // Experiment 2
-                algorithms.Add(new GRASP(instance, 0.25f, 100, GraspType.BiasedGRASP));
-                algorithms.Add(new GRASP(instance, 0.5f, 100, GraspType.BiasedGRASP));
-                algorithms.Add(new GRASP(instance, 0.75f, 100, GraspType.BiasedGRASP));
-                algorithms.Add(new GRASP(instance, -1f, 100, GraspType.BiasedGRASP));
+            // Experiment 1
+            algorithms.Add(new GRASP(instance, 0.25f, 100, GraspType.GRASP));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, GraspType.GRASP));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, GraspType.GRASP));
+            algorithms.Add(new GRASP(instance, -1f, 100, GraspType.GRASP));
 
-                // Experiment 3
-                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
-                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            // Experiment 2
+            algorithms.Add(new GRASP(instance, 0.25f, 100, GraspType.BiasedGRASP));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, GraspType.BiasedGRASP));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, GraspType.BiasedGRASP));
+            algorithms.Add(new GRASP(instance, -1f, 100, GraspType.BiasedGRASP));
 
-                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
-                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            // Experiment 3
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.FirstImprovement));
 
-                // Experiment 4
-                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
-                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.GRASP, ImprovementType.BestImprovement));
 
-                algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-                algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
-            }
+            // Experiment 4
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+            algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.FirstImprovement));
+
+            algorithms.Add(new GRASP(instance, 0.25f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.5f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, 0.75f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
+            algorithms.Add(new GRASP(instance, -1f, 100, 3, GraspType.BiasedGRASP, ImprovementType.BestImprovement));
 
             foreach (IAlgorithm algorithm in algorithms)
             {

@@ -109,6 +109,7 @@ namespace MaxInterventionK_Subsets
             return s;
         }
 
+        // NO ESTÁ TERMINADO, HAY  Q HACERLO !!!!!!
         private Solution Improve(Solution solution)
         {
             Solution bestSol = solution.Clone();
@@ -118,12 +119,11 @@ namespace MaxInterventionK_Subsets
             {
                 improved = false;
 
-                Solution sol = bestSol.Clone();
                 HashSet<int> blackListedElements = new HashSet<int>();
                 HashSet<int> candidateElements = new HashSet<int>();
                 for (int i = 0; i < _instance.GetElementCount(); i++)
                 {
-                    if (!sol.GetElements().Contains(i))
+                    if (!bestSol.GetElements().Contains(i))
                     {
                         candidateElements.Add(i);
                     }
@@ -134,26 +134,27 @@ namespace MaxInterventionK_Subsets
                     // We remove a random element from the solution
                     int randomElementId;
                     int randomElement;
-                    do
-                    {
-                        randomElementId = _random.Next(sol.GetElementCount());
-                        randomElement = sol.GetElements().ElementAt(randomElementId);
-                    } while (!blackListedElements.Add(randomElement));
-
-                    sol.RemoveElement(randomElement);
 
                     Solution improvedSol;
+                    improvedSol = bestSol.Clone();
+
                     // We add a random element from the candidate list
                     switch (_improvementType)
                     {
                         case ImprovementType.FirstImprovement:
-                            improvedSol = sol.Clone();
+                            do
+                            {
+                                randomElementId = _random.Next(bestSol.GetElementCount());
+                                randomElement = bestSol.GetElements().ElementAt(randomElementId);
+                            } while (!blackListedElements.Add(randomElement));
+                            improvedSol.RemoveElement(randomElement);
+
                             CalculateNextElement(improvedSol, candidateElements);
 
-                            if (improvedSol.GetMaxInterrsection() > sol.GetMaxInterrsection())
+                            if (improvedSol.GetMaxInterrsection() > bestSol.GetMaxInterrsection())
                             {
                                 improved = true;
-                                sol = improvedSol;
+                                bestSol = improvedSol;
                             }
                             
                             break;
@@ -166,15 +167,23 @@ namespace MaxInterventionK_Subsets
 
                             do
                             {
-                                improvedSol = sol.Clone();
+                                improvedSol = bestSol.Clone();
+                                do
+                                {
+                                    randomElementId = _random.Next(bestSol.GetElementCount());
+                                    randomElement = bestSol.GetElements().ElementAt(randomElementId);
+                                } while (!blackListedElements.Add(randomElement));
+                                improvedSol.RemoveElement(randomElement);
+
                                 actualElement = CalculateNextElement(improvedSol, candidateElements);
                                 actualSolInttersecttion = improvedSol.GetMaxInterrsection();
 
-                                if (actualSolInttersecttion > sol.GetMaxInterrsection())
+                                if (actualSolInttersecttion > bestSol.GetMaxInterrsection())
                                 {
                                     improved = true;
                                     bestSolIntersection = actualSolInttersecttion;
                                     bestElement = actualElement;
+                                    bestSol = improvedSol;
                                 }
                             } while (bestElement > 0 && candidateElements.Count > 0);
 
