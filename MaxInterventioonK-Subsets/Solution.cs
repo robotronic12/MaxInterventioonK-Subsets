@@ -70,6 +70,16 @@ namespace MaxInterventionK_Subsets
         }
 
         /// <summary>
+        /// Checks if the solution contains a specific element.
+        /// </summary>
+        /// <param name="elementId">The ID of the element to check.</param>
+        /// <returns>True if the solution contains the element; otherwise, false.</returns>
+        public bool ContainsElement(int elementId)
+        {
+            return _elements.Contains(elementId);
+        }
+
+        /// <summary>
         /// Gets the count of elements in the solution.
         /// </summary>
         /// <returns>The count of elements in the solution.</returns>
@@ -94,6 +104,15 @@ namespace MaxInterventionK_Subsets
         public IReadOnlyList<int> GetCommonFeatures()
         {
             return _commonFeatures.GetIdList();
+        }
+
+        /// <summary>
+        /// Gets the common features in the solution as a BitSet.
+        /// </summary>
+        /// <returns>A copy of the common features BitSet.</returns>
+        public BitSet GetCommonFeaturesBitSet()
+        {
+            return _commonFeatures.Clone();
         }
 
         /// <summary>

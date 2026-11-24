@@ -109,94 +109,91 @@ namespace MaxInterventionK_Subsets
             return s;
         }
 
-        // NO ESTÁ TERMINADO, HAY  Q HACERLO !!!!!!
         private Solution Improve(Solution solution)
         {
             Solution bestSol = solution.Clone();
-
             bool improved = false;
+
+            // A separate random manager is used so that the geometric distribution does not affect the improvement process
+            var impRandom = new RandomManager();
+
+            for (int impAtempts = 0; impAtempts < _nImprovements; impAtempts++)
+            {
+                switch(_improvementType)
+                {
+                    case ImprovementType.FirstImprovement:
+                        bestSol = FirstImprove(bestSol);
+                        break;
+
+                    case ImprovementType.BestImprovement:
+                        bestSol = BestImprove(bestSol);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Error: Invalid improvement type {_improvementType}");
+                }
+            }
+
+            return bestSol;
+        }
+
+        // NO ESTÁ TERMINADO, HAY  Q HACERLO !!!!!!
+        private Solution BestImprove(Solution bestSol)
+        {
+            // bool improved = false;
+            // RandomManager impRandom = new RandomManager();
+
+            return bestSol;
+        }
+
+        private Solution FirstImprove(Solution bestSol)
+        {
+            bool improved = false;
+            RandomManager impRandom = new RandomManager();
+
             do
             {
                 improved = false;
 
-                HashSet<int> blackListedElements = new HashSet<int>();
-                HashSet<int> candidateElements = new HashSet<int>();
+                Solution improvedSol = bestSol.Clone();
+                List<int> candidateElements = new List<int>();
                 for (int i = 0; i < _instance.GetElementCount(); i++)
                 {
-                    if (!bestSol.GetElements().Contains(i))
-                    {
+                    if (!improvedSol.ContainsElement(i))
                         candidateElements.Add(i);
-                    }
                 }
 
-                for (int i = 0; i < _nImprovements; i++)
+                // Remove a random element
+                int elementToRemove = bestSol.GetElements().ElementAt(impRandom.Next(bestSol.GetElementCount()));
+
+                // We remove the element from the solution and add it to the explored elements
+                // If the element cannot be removed, we throw an exception
+                if (!improvedSol.RemoveElement(elementToRemove))
+                    throw new InvalidOperationException($"Error: Could not remove element {elementToRemove} from solution.");
+
+                while (candidateElements.Count > 0)
                 {
-                    // We remove a random element from the solution
-                    int randomElementId;
-                    int randomElement;
+                    // We add a random element from the candidate list to the solution
+                    int nextElement = candidateElements.ElementAt(impRandom.Next(candidateElements.Count));
+                    candidateElements.Remove(nextElement);
 
-                    Solution improvedSol;
-                    improvedSol = bestSol.Clone();
-
-                    // We add a random element from the candidate list
-                    switch (_improvementType)
+                    if (improvedSol.AddElement(nextElement))
                     {
-                        case ImprovementType.FirstImprovement:
-                            do
-                            {
-                                randomElementId = _random.Next(bestSol.GetElementCount());
-                                randomElement = bestSol.GetElements().ElementAt(randomElementId);
-                            } while (!blackListedElements.Add(randomElement));
-                            improvedSol.RemoveElement(randomElement);
 
-                            CalculateNextElement(improvedSol, candidateElements);
-
-                            if (improvedSol.GetMaxInterrsection() > bestSol.GetMaxInterrsection())
-                            {
-                                improved = true;
-                                bestSol = improvedSol;
-                            }
-                            
+                        // If the new solution is better than the current best solution, we update the best solution and set improved to true
+                        if (improvedSol.GetMaxInterrsection() > bestSol.GetMaxInterrsection())
+                        {
+                            bestSol = improvedSol.Clone();
+                            improved = true;
                             break;
-
-                        case ImprovementType.BestImprovement:
-                            int actualElement;
-                            int actualSolInttersecttion;
-                            int bestElement = -1;
-                            int bestSolIntersection = -1;
-
-                            do
-                            {
-                                improvedSol = bestSol.Clone();
-                                do
-                                {
-                                    randomElementId = _random.Next(bestSol.GetElementCount());
-                                    randomElement = bestSol.GetElements().ElementAt(randomElementId);
-                                } while (!blackListedElements.Add(randomElement));
-                                improvedSol.RemoveElement(randomElement);
-
-                                actualElement = CalculateNextElement(improvedSol, candidateElements);
-                                actualSolInttersecttion = improvedSol.GetMaxInterrsection();
-
-                                if (actualSolInttersecttion > bestSol.GetMaxInterrsection())
-                                {
-                                    improved = true;
-                                    bestSolIntersection = actualSolInttersecttion;
-                                    bestElement = actualElement;
-                                    bestSol = improvedSol;
-                                }
-                            } while (bestElement > 0 && candidateElements.Count > 0);
-
-                            break;
-
-                        default:
-                            throw new NotImplementedException();
+                        }
                     }
                 }
+
             } while (improved);
 
             return bestSol;
-            }
+        }
 
         private int CalculateNextElement(Solution s, HashSet<int> candidateList)
         {

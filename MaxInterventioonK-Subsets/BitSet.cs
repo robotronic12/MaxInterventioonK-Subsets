@@ -125,6 +125,32 @@ namespace MaxInterventionK_Subsets
         }
 
         /// <summary>
+        /// Inverts all bits in the BitSet (1 becomes 0 and 0 becomes 1).
+        /// </summary>
+        public void Invert()
+        {
+            int lastWordIndex = _bitsCount / BITS_PER_WORD;
+            int lastBitIndex = _bitsCount % BITS_PER_WORD;
+
+            // Invert all complete words
+            for (int i = 0; i < lastWordIndex; i++)
+            {
+                _words[i] = ~_words[i];
+            }
+
+            // Invert the last word and clear unused bits
+            if (lastBitIndex == 0)
+            {
+                _words[lastWordIndex] = ~_words[lastWordIndex];
+            }
+            else
+            {
+                ulong mask = (1UL << lastBitIndex) - 1;
+                _words[lastWordIndex] ^= mask;
+            }
+        }
+
+        /// <summary>
         /// Creates a copy of the current BitSet.
         /// </summary>
         /// <returns>A new BitSet that is a copy of the current BitSet.</returns>
@@ -183,6 +209,56 @@ namespace MaxInterventionK_Subsets
             }
 
             return idList;
+        }
+
+        /// <summary>
+        /// Checks if all bits are set to 1.
+        /// </summary>
+        /// <returns>True if all bits are set to 1; otherwise, false.</returns>
+        public bool AreAllOnes()
+        {
+            if (_bitsCount == 0)
+            {
+                return true;
+            }
+
+            int lastWordIndex = _bitsCount / BITS_PER_WORD;
+            int lastBitIndex = _bitsCount % BITS_PER_WORD;
+
+            // Check all complete words
+            for (int i = 0; i < lastWordIndex; i++)
+            {
+                if (_words[i] != ulong.MaxValue)
+                {
+                    return false;
+                }
+            }
+
+            // Check the last word (might not be completely filled)
+            if (lastBitIndex == 0)
+            {
+                return _words[lastWordIndex] == ulong.MaxValue;
+            }
+
+            ulong mask = (1UL << lastBitIndex) - 1;
+            return (_words[lastWordIndex] & mask) == mask;
+        }
+
+        /// <summary>
+        /// Checks if all bits are set to 0.
+        /// </summary>
+        /// <returns>True if all bits are set to 0; otherwise, false.</returns>
+        public bool AreAllZeros()
+        {
+            foreach (ulong word in _words)
+            {
+                if (word != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void ValidateId(int id)
